@@ -1,0 +1,2 @@
+[console_scripts]
+pat-etl = pat_etl.cli:main

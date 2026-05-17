@@ -1,0 +1,37 @@
+mysql:
+  host: 172.16.0.60
+  port: 13306
+  user: root
+  password: KpsMysql666
+  database: mdc_pat
+  charset: utf8mb4
+dataset:
+  #填小写字母
+  table_id: a
+  batch_id: batch_20260113_103338
+
+  ods_table: ods_pat_raw_a_batch_01
+  stage_table: dwd_patents_stage_a
+
+  instock_table: dwd_patents_in_stock_a
+  unqualified_table: dwd_patents_unqualified_a
+
+  final_instock_table: dwd_patents_in_stock
+  final_unqualified_table: dwd_patents_unqualified
+
+  #填大写字母
+  data_source: A
+
+run:
+  segment: 20000
+  chunk: 50000
+  fetch_files_per_round: 50
+  commit_every_files: 5
+  mode: all_not_success
+  degrade_to_single_on_group_fail: true
+  delete_before_insert: false
+  max_retries: 5
+  sleep_seconds: 3
+progress:
+  stage_clean_progress_table: etl_stage_clean_progress
+  stage_split_progress_table: etl_stage_split_progress

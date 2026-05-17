@@ -1,0 +1,7 @@
+Metadata-Version: 2.4
+Name: pat-etl
+Version: 0.1.0
+Summary: Lightweight ETL runner for ODS->Stage->DWD + file checks
+Requires-Python: >=3.10
+Requires-Dist: pymysql>=1.1.0
+Requires-Dist: PyYAML>=6.0.0

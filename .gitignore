@@ -1,0 +1,26 @@
+# virtual environment
+venv/
+.venv/
+env/
+
+# original data / raw files
+patents_original/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# IDE config
+.idea/
+.vscode/
+
+# secrets and logs
+.env
+*.log
+
+# data files
+*.csv
+*.xlsx
+*.xls
+*.db

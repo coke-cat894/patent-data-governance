@@ -1,0 +1,112 @@
+# ===============================
+# MySQL 数据库连接配置
+# ===============================
+mysql:
+  host: YOUR_HOST              # 数据库地址（如 10.10.88.236）
+  port: 13306                  # 数据库端口（默认 3306，如云数据库可能不同）
+  user: YOUR_USER              # 数据库用户名
+  password: ${MYSQL_PASSWORD}  # 数据库密码（推荐使用环境变量，不直接写明文）
+  database: mdc_pat            # 数据库名称
+  charset: utf8mb4             # 字符集，建议保持 utf8mb4
+
+# ===============================
+# 数据集相关配置（当前批次参数）
+# ===============================
+dataset:
+  table_id: a                  # 分区标识（a / c / d 等）
+                                  # 决定使用哪个分表
+
+  batch_id: batch_YYYYMMDD_HHMMSS
+                                  # 当前批次号（必须唯一）
+                                  # 建议格式：batch_20260113_102546
+
+  ods_table: ods_pat_raw_a_batch_01
+                                  # ODS 层表名
+                                  # 原始入库层
+
+  stage_table: dwd_patents_stage_a
+                                  # Stage 层表名
+                                  # 标准化 + 清洗处理层
+
+  instock_table: dwd_patents_in_stock_a
+                                  # 分区有效数据表（Stage 分流后的有效数据）
+
+  unqualified_table: dwd_patents_unqualified_a
+                                  # 分区脏数据表（Stage 分流后的无效数据）
+
+  final_instock_table: dwd_patents_in_stock
+                                  # 最终有效总表（多分区合并后）
+
+  final_unqualified_table: dwd_patents_unqualified
+                                  # 最终脏数据总表（多分区合并后）
+
+  data_source: A
+                                  # 数据来源标识
+                                  # 写入 final 表时填入
+                                  # A / C / D 对应不同数据源
+
+
+# ===============================
+# 运行控制参数
+# ===============================
+run:
+
+  # ---------------------------
+  # Stage 清洗分段大小
+  # ---------------------------
+  segment: 20000
+                                  # Stage 层更新时的分段范围
+                                  # 每次处理多少条 stage_id
+                                  # 数据量大时建议 20000 ~ 200000
+
+  # ---------------------------
+  # Final 插入分段大小
+  # ---------------------------
+  chunk: 50000
+                                  # Final 表插入时的分段大小
+                                  # INSERT 分批推进
+                                  # 建议 50000 左右
+
+  # ---------------------------
+  # 文件检测相关参数
+  # ---------------------------
+  fetch_files_per_round: 50
+                                  # 每轮拉取多少条待检测文件
+
+  commit_every_files: 5
+                                  # 每检测多少个文件提交一次事务
+                                  # 防止长事务占用连接
+
+  mode: all_not_success
+                                  # 文件检测模式
+                                  # all_not_success: 只处理未成功的
+                                  # only_new: 只处理新数据
+
+  degrade_to_single_on_group_fail: true
+                                  # 分组检测失败后是否降级为单个检测
+                                  # true 更安全，false 性能更高
+
+  delete_before_insert: false
+                                  # 插入前是否删除旧数据
+                                  # 一般 false（使用 INSERT IGNORE 保证幂等）
+
+  max_retries: 5
+                                  # SQL 执行最大重试次数
+                                  # 用于死锁 / 锁等待自动重试
+
+  sleep_seconds: 3
+                                  # 重试间隔时间（秒）
+
+
+# ===============================
+# 断点续跑表配置
+# ===============================
+progress:
+
+  stage_clean_progress_table: etl_stage_clean_progress
+                                  # Stage 清洗断点记录表
+                                  # 记录 last_stage_id / updated_rows
+
+  stage_split_progress_table: etl_stage_split_progress
+                                  # Stage 分流断点记录表
+                                  # 支持中断后续跑
