@@ -9,34 +9,31 @@
 本项目为专利数据治理 ETL 工程，采用分层架构设计，实现从原始数据到最终可用数据的全流程治理。
 
 ## 项目结构
+
+```text id="z0s3d7"
 pat_etl/
-│
-├── cli.py                # 命令行入口
-│
+├── cli.py                              # 命令行入口
 ├── jobs/
-│     ├── ods_to_stage.py   #ods数据抽取到stage层，做简单标准化处理。
-│     ├── stage_clean.py    #核心治理层，数据规范化
-│     ├── stage_split.py    #分流数据到dwd解耦层
-│     ├── finalize_instock.py   #抽取最终合格数据到最终表dwd_patents_in_stock
-│     ├── finalize_unqualified.py   #抽取脏数据到最终表dwd_patents_unqualified
-│
-├── utils/
-│
+│   ├── ods_to_stage.py                 # 将 ODS 层数据抽取到 Stage 层，并进行简单标准化处理
+│   ├── stage_clean.py                  # 核心治理层，负责数据规范化处理
+│   ├── stage_split.py                  # 将数据分流到 DWD 解耦层
+│   ├── finalize_instock.py             # 抽取最终合格数据到 dwd_patents_in_stock 表
+│   └── finalize_unqualified.py         # 抽取脏数据到 dwd_patents_unqualified 表
+├── utils/                              # 通用工具函数
 ├── configs/
-│     ├── test_a.yaml   #a类专利参数设置
-│     ├── test_c.yaml   #c类专利参数设置
-│     ├── test_d.yaml   #d类专利参数设置
-│
-│── original_version/   #原始代码版本
-│     ├── ODS-Stage跑批.py    
-│     ├── stage_clean_job.py
-│     ├── 同时分流.py
-│     ├── 插入unqualified.py
-│     ├── 插入最终dwd表.py
-│
-│
-│── csv_to_ods.py   #csv加载入库ods层
-└── offset_migrate_stage.py     #stage表、dwd_patents_in_stock_x和dwd_patents_unqualified_x三表id平移功能
+│   ├── test_a.yaml                     # A 类专利处理参数配置
+│   ├── test_c.yaml                     # C 类专利处理参数配置
+│   └── test_d.yaml                     # D 类专利处理参数配置
+├── original_version/                   # 原始代码版本
+│   ├── ODS-Stage跑批.py
+│   ├── stage_clean_job.py
+│   ├── 同时分流.py
+│   ├── 插入unqualified.py
+│   └── 插入最终dwd表.py
+├── csv_to_ods.py                       # 将 CSV 数据加载入库到 ODS 层
+└── offset_migrate_stage.py             # Stage、dwd_patents_in_stock_x 和 dwd_patents_unqualified_x 三表 ID 平移功能
+```
+
 
 
 
