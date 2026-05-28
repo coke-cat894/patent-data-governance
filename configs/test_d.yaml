@@ -2,7 +2,7 @@ mysql:
   host: 172.16.0.60
   port: 13306
   user: root
-  password: KpsMysql666
+  password: 【password】
   database: mdc_pat
   charset: utf8mb4
 dataset:
